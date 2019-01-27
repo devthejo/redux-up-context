@@ -1,0 +1,54 @@
+{
+  "name": "@redux-up/context",
+  "version": "1.0.0",
+  "description": "fractal react redux api based on context",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "webpack --mode development && webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takion/redux-up-context.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "react-redux",
+    "context",
+    "rematch",
+    "model",
+    "nested"
+  ],
+  "author": "Jo <jo@redcat.ninja> (https://redcat.ninja)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/takion/redux-up-context/issues"
+  },
+  "homepage": "https://github.com/takion/redux-up-context#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.51",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
+    "babel-preset-env": "^7.0.0-beta.3",
+    "babel-register": "^7.0.0-beta.3",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "@redux-up/hooks": "^1.0.0",
+    "@rematch/core": "^1.0.6",
+    "@rematch/immer": "^1.1.0",
+    "react": "^16.7.0",
+    "react-redux": "^6.0.0"
+  },
+  "files": [
+    "lib"
+  ]
+}
