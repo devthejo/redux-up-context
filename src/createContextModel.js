@@ -53,7 +53,7 @@ function createContextModel(model, options){
     useAction: mapActions => useContextAction(context, mapActions),
     get connect(){
       if(!contextConnect)
-        contextConnect = function(mapStateToProps, mapDispatchToProps, mergeProps, options){
+        contextConnect = function(mapStateToProps, mapDispatchToProps, mergeProps, options = {}){
           options = {
             context,
             ...options
