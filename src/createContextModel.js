@@ -34,7 +34,7 @@ function createContextModel(model, options){
     get createModel(){
       return mergeRuntime(createModel, model, options)
     }, //class constructor component
-    get useModel {
+    get useModel() {
       return mergeRuntime(useModel, model, options)
     }, //hook for function component
     Provider: ({store, children}) => <Provider context={context} store={store} children={children} />,
