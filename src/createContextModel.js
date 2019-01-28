@@ -14,12 +14,18 @@ function mergeRuntime(callFunc, defaultModel = {}, defaultOptions = {}){
       model = model(defaultModel)
     }
     else{
+      if(typeof defaultModel==='function'){
+        defaultModel = defaultModel()
+      }
       model = deepmerge(defaultModel, model)
     }
     if(typeof options==='function'){
       options = options(defaultOptions)
     }
     else{
+      if(typeof defaultOptions==='function'){
+        defaultOptions = defaultOptions()
+      }
       options = deepmerge(defaultOptions, options)
     }
     return callFunc(model, options)
