@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "fractal react redux api based on context",
   "main": "lib/index.js",
+  "module": "lib/index.es.js",
   "scripts": {
-    "build": "webpack --mode development && webpack --mode production"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -32,20 +33,21 @@
     "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
-    "babel-preset-env": "^7.0.0-beta.3",
-    "babel-register": "^7.0.0-beta.3",
-    "uglifyjs-webpack-plugin": "^2.1.1",
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1",
-    "webpack-node-externals": "^1.7.2"
+    "@babel/register": "^7.0.0",
+    "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-url": "^2.1.0"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@redux-up/hooks": "^1.0.0",
     "@rematch/core": "^1.0.6",
     "@rematch/immer": "^1.1.0",
     "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "redux": "^4.0.1",
     "react-redux": "^6.0.0"
   },
   "files": [
