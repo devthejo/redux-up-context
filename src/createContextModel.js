@@ -37,13 +37,6 @@ function createContextModel(model, options){
   const context = createContext()
   return {
     context,
-    get connect(mapStateToProps, mapDispatchToProps, mergeProps, options = {}){
-      options = {
-        context,
-        ...options
-      }
-      return connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
-    },
     get createModel(){
       return mergeRuntime(createModel, model, options)
     }, //class constructor component
@@ -53,6 +46,15 @@ function createContextModel(model, options){
     Provider: ({store, children}) => <Provider context={context} store={store} children={children} />,
     useStore: mapState => useContextStore(context, mapState),
     useAction: mapActions => useContextAction(context, mapActions),
+    get connect(){
+      return function(mapStateToProps, mapDispatchToProps, mergeProps, options){
+        options = {
+          context,
+          ...options
+        }
+        return connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
+      }
+    },
   }
 }
 
