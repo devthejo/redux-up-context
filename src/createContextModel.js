@@ -35,25 +35,32 @@ function mergeRuntime(callFunc, defaultModel = {}, defaultOptions = {}){
 
 function createContextModel(model, options){
   const context = createContext()
+  let createModel, useModel, reactReduxConnect
   return {
     context,
     get createModel(){
-      return mergeRuntime(createModel, model, options)
+      if(createModel===undefined)
+        createModel = mergeRuntime(createModel, model, options)
+      return createModel
     }, //class constructor component
     get useModel() {
-      return mergeRuntime(useModel, model, options)
+      if(useModel===undefined)
+        useModel = mergeRuntime(useModel, model, options)
+      return useModel
     }, //hook for function component
     Provider: ({store, children}) => <Provider context={context} store={store} children={children} />,
     useStore: mapState => useContextStore(context, mapState),
     useAction: mapActions => useContextAction(context, mapActions),
     get connect(){
-      return function(mapStateToProps, mapDispatchToProps, mergeProps, options){
-        options = {
-          context,
-          ...options
+      if(!reactReduxConnect)
+        reactReduxConnect = function(mapStateToProps, mapDispatchToProps, mergeProps, options){
+          options = {
+            context,
+            ...options
+          }
+          return connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
         }
-        return connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
-      }
+      return reactReduxConnect
     },
   }
 }
