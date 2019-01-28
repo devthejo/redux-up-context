@@ -1,7 +1,7 @@
 import React, {createContext} from 'react'
 import deepmerge from 'deepmerge'
 
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 
 import useModel from './useModel'
 import createModel from './createModel'
@@ -37,6 +37,13 @@ function createContextModel(model, options){
   const context = createContext()
   return {
     context,
+    get connect(mapStateToProps, mapDispatchToProps, mergeProps, options = {}){
+      options = {
+        context,
+        ...options
+      }
+      return connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
+    },
     get createModel(){
       return mergeRuntime(createModel, model, options)
     }, //class constructor component
