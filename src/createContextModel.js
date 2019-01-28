@@ -11,8 +11,8 @@ function createContextModel(model, options){
   const context = createContext()
   return {
     context,
-    createModel: ()=>createModel(model, options), //class constructor component
-    useModel: ()=>useModel(model, options), //hook for function component
+    createModel: (m = model, o = options)=>createModel(m, o), //class constructor component
+    useModel: (m = model, o = options)=>useModel(m, o), //hook for function component
     Provider: ({store, children}) => <Provider context={context} store={store} children={children} />,
     useStore: mapState => useContextStore(context, mapState),
     useAction: mapActions => useContextAction(context, mapActions),
