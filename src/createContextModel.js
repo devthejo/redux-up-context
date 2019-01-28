@@ -35,7 +35,7 @@ function mergeRuntime(callFunc, defaultModel = {}, defaultOptions = {}){
 
 function createContextModel(model, options){
   const context = createContext()
-  let contextCreateModel, contextUseModel, contextConnect
+  let contextCreateModel, contextUseModel, contextConnect, contextStore
   return {
     context,
     get createModel(){
@@ -48,7 +48,10 @@ function createContextModel(model, options){
         contextUseModel = mergeRuntime(useModel, model, options)
       return contextUseModel
     }, //hook for function component
-    Provider: ({store, children}) => <Provider context={context} store={store} children={children} />,
+    Provider: ({store, children}) => {
+      contextStore = store
+      return <Provider context={context} store={store} children={children} />
+    },
     useStore: mapState => useContextStore(context, mapState),
     useAction: mapActions => useContextAction(context, mapActions),
     get connect(){
@@ -61,6 +64,9 @@ function createContextModel(model, options){
           return connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
         }
       return contextConnect
+    },
+    get select(){
+      return contextStore.select
     },
   }
 }
