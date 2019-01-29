@@ -36,7 +36,7 @@ function mergeRuntime(callFunc, defaultModel = {}, defaultOptions = {}){
 function createContextModel(model, options){
   const context = createContext()
   let contextCreateModel, contextUseModel, contextConnect, contextStore
-  return {
+  const contextApi = {
     context,
     get createModel(){
       if(contextCreateModel===undefined)
@@ -68,7 +68,14 @@ function createContextModel(model, options){
     get select(){
       return contextStore.select
     },
+    
+    get connectSelectors(mapSelectors){
+      return contextApi.connect((state, props)=>contextStore.select(mapSelectors)(state, props))
+    },
+    
   }
+  
+  return contextApi
 }
 
 export default createContextModel
