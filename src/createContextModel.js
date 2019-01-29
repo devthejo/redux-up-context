@@ -86,7 +86,7 @@ function createContextModel(model, options){
     
     get useSelectors(){
       if(!contextUseSelectors){
-        contextUseSelectors = (mapSelectors, props={}) => contextStore.select(mapSelectors)(store.getState(), props)
+        contextUseSelectors = (mapSelectors, props={}) => contextStore.select(mapSelectors)(contextStore.getState(), props)
       }
       return contextUseSelectors
     },
