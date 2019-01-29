@@ -15,7 +15,7 @@ function createModel(models, options = {}){
   const plugins = [...optionsPlugins]
   
   if(immer){
-    plugins.push(immerPlugin)
+    plugins.push(immerPlugin())
   }
   if(select){
     plugins.push(selectPlugin())
