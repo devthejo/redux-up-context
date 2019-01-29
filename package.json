@@ -1,6 +1,6 @@
 {
   "name": "@redux-up/context",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description": "fractal react redux api based on context",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
