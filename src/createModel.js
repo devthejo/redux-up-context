@@ -1,14 +1,16 @@
 import { init } from '@rematch/core'
 import immerPlugin from '@rematch/immer'
 import selectPlugin from '@rematch/select'
+import defaultOptions from './defaultOptions'
 
 function createModel(models, options = {}){
+  options = {...defaultOptions, ...options}
   const {
-    plugins: optionsPlugins = [],
-    immer = true,
-    select = true,
-    multi = true,
-    key = 'model',
+    plugins: optionsPlugins,
+    immer,
+    select,
+    multi,
+    key,
     ...mergeOptions
   } = options
 

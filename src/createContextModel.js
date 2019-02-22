@@ -3,10 +3,11 @@ import deepmerge from 'deepmerge'
 
 import { Provider, connect } from 'react-redux'
 
+import { useContextStore, useContextAction } from '@redux-up/hooks'
+
 import useModel from './useModel'
 import createModel from './createModel'
-
-import { useContextStore, useContextAction } from '@redux-up/hooks'
+import defaultOptions from './defaultOptions'
 
 function mergeRuntime(callFunc, defaultModel = {}, defaultOptions = {}){
   return function(model = {}, options = {}){
@@ -36,9 +37,10 @@ function mergeRuntime(callFunc, defaultModel = {}, defaultOptions = {}){
 function createContextModel(model, options = {}){
   const context = createContext()
 
+  options = {...defaultOptions, ...options}
   const {
-    multi = true,
-    key = 'model',
+    multi,
+    key,
   } = options
 
   let
