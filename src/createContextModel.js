@@ -75,7 +75,7 @@ function createContextModel(model, options = {}){
           return contextStore.select[key][prop]
         }
       })
-      return subSelect
+      return proxy
     }
   }
 
@@ -132,13 +132,16 @@ function createContextModel(model, options = {}){
       return contextConnectSelectors
     },
 
+    useSelector(mapSelector, props={}){
+      return contextApi.useSelectors(selectors => ({selector: mapSelector(selectors)}), props).selector
+    },
     get useSelectors(){
       if(!contextUseSelectors){
         if(multi){
           contextUseSelectors = (mapSelectors, props={}) => contextStore.select(mapSelectors)(contextStore.getState(), props)
         }
         else{
-          contextUseSelectors = (mapSelectors, props={}) => contextStore.select(mapSelectors)(contextStore.getState()[key], props)
+          contextUseSelectors = (mapSelectors, props={}) => contextStore.select(models => mapSelectors(models[key]))(contextStore.getState(), props)
         }
       }
       return contextUseSelectors

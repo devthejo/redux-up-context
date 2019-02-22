@@ -35,7 +35,7 @@ function createModel(models, options = {}){
       return Object.entries(selectors).reduce((o, [selectorKey, selector])=>{
         o[selectorKey] = function(){
           return function(rootState, props){
-            selector(rootState[key], props)
+            return selector()(rootState[key], props)
           }
         }
         return o
