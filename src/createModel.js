@@ -44,8 +44,8 @@ function createModel(models, options = {}){
 
     const localEffetcs = function(dispatch){
       const effectsMap = effects(dispatch[key])
-      return Object.entries(effectsMap).reduce((o, [key, effect])=>{
-        o[key] = function(payload, rootState){
+      return Object.entries(effectsMap).reduce((o, [effectKey, effect])=>{
+        o[effectKey] = function(payload, rootState){
           return effect(payload, rootState[key])
         }
         return o
