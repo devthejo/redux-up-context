@@ -35,7 +35,12 @@ function mergeRuntime(callFunc, defaultModel = {}, defaultOptions = {}){
 
 function createContextModel(model, options){
   const context = createContext()
-  
+
+  const {
+    multi = true,
+    key = 'model',
+  } = options
+
   let
     contextCreateModel,
     contextUseModel,
@@ -43,7 +48,22 @@ function createContextModel(model, options){
     contextStore,
     contextConnectSelectors,
     contextUseSelectors
-    
+
+  let useStore,
+      useAction,
+      select
+
+  if(multi){
+    useStore = mapState => useContextStore(context, mapState)
+    useAction = mapActions => useContextAction(context, mapActions)
+    select = () => contextStore.select
+  }
+  else{
+    useStore = mapState => useContextStore(context, state => mapState(state[key]))
+    useAction = mapActions => useContextAction(context, dispatch => mapActions(dispatch[key]))
+    select = () => contextStore.select[key]
+  }
+
   const contextApi = {
     context,
     get createModel(){
@@ -60,39 +80,55 @@ function createContextModel(model, options){
       contextStore = store
       return <Provider context={context} store={store} children={children} />
     },
-    useStore: mapState => useContextStore(context, mapState),
-    useAction: mapActions => useContextAction(context, mapActions),
+    useStore,
+    useAction,
     get connect(){
-      if(!contextConnect)
-        contextConnect = function(mapStateToProps, mapDispatchToProps, mergeProps, options = {}){
-          options = {
-            context,
-            ...options
+      if(!contextConnect){
+        if(multi){
+          contextConnect = function(mapStateToProps, mapDispatchToProps, mergeProps, options = {}){
+            options = {context, ...options}
+            return connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
           }
-          return connect(mapStateToProps, mapDispatchToProps, mergeProps, options)
         }
+        else{
+          contextConnect = function(mapStateToProps, mapDispatchToProps, mergeProps, options = {}){
+            options = {context, ...options}
+            return connect(state => mapStateToProps(state[key]), dispatch => mapDispatchToProps(dispatch[key]), mergeProps, options)
+          }
+        }
+      }
       return contextConnect
     },
     get select(){
-      return contextStore.select
+      return select()
     },
-    
+
     get connectSelectors(){
       if(!contextConnectSelectors){
-        contextConnectSelectors = mapSelectors => contextApi.connect((state, props)=>contextStore.select(mapSelectors)(state, props))
+        if(multi){
+          contextConnectSelectors = mapSelectors => contextApi.connect((state, props)=>contextStore.select(mapSelectors)(state, props))
+        }
+        else{
+          contextConnectSelectors = mapSelectors => contextApi.connect((state, props)=>contextStore.select(mapSelectors)(state[key], props))
+        }
       }
       return contextConnectSelectors
     },
-    
+
     get useSelectors(){
       if(!contextUseSelectors){
-        contextUseSelectors = (mapSelectors, props={}) => contextStore.select(mapSelectors)(contextStore.getState(), props)
+        if(multi){
+          contextUseSelectors = (mapSelectors, props={}) => contextStore.select(mapSelectors)(contextStore.getState(), props)
+        }
+        else{
+          contextUseSelectors = (mapSelectors, props={}) => contextStore.select(mapSelectors)(contextStore.getState()[key], props)
+        }
       }
       return contextUseSelectors
     },
-    
+
   }
-  
+
   return contextApi
 }
 

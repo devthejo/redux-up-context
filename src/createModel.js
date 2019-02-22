@@ -11,34 +11,35 @@ function createModel(models, options = {}){
     key = 'model',
     ...mergeOptions
   } = options
-  
+
   const plugins = [...optionsPlugins]
-  
+
   if(immer){
     plugins.push(immerPlugin())
   }
   if(select){
     plugins.push(selectPlugin())
   }
-  
+
   if(!multi){
     const {
+      state,
       reducers,
       effects,
       selectors,
     } = models
-    
+
     const localEffetcs = function(dispatch){
       const effectsMap = effects(dispatch[key])
-      return Object.entries(effectsMap).reduce(o, ([key, effect])=>{
+      return Object.entries(effectsMap).reduce((o, [key, effect])=>{
         o[key] = function(payload, rootState){
           return effect(payload, rootState[key])
         }
         return o
       }, {})
     }
-    
-    const localSelectors = Object.entries(selectors).reduce(o, ([key, selector])=>{
+
+    const localSelectors = Object.entries(selectors).reduce((o, [key, selector])=>{
       o[key] = function(){
         return function(rootState, props){
           selector(rootState[key], props)
@@ -46,16 +47,17 @@ function createModel(models, options = {}){
       }
       return o
     }, {})
-    
+
     models = {
       [key]: {
+        state,
         reducers,
-        effetcs: localEffetcs,
+        effects: localEffetcs,
         selectors: localSelectors,
       }
     }
   }
-  
+
   return init({
     models,
     plugins,
