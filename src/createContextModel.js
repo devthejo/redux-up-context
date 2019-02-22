@@ -33,7 +33,7 @@ function mergeRuntime(callFunc, defaultModel = {}, defaultOptions = {}){
 }
 
 
-function createContextModel(model, options){
+function createContextModel(model, options = {}){
   const context = createContext()
 
   const {
