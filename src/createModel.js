@@ -31,6 +31,17 @@ function createModel(models, options = {}){
       selectors,
     } = models
 
+    function getLocalSelectors(selectors){
+      return Object.entries(selectors).reduce((o, [selectorKey, selector])=>{
+        o[selectorKey] = function(){
+          return function(rootState, props){
+            selector(rootState[key], props)
+          }
+        }
+        return o
+      }, {})
+    }
+
     const localEffetcs = function(dispatch){
       const effectsMap = effects(dispatch[key])
       return Object.entries(effectsMap).reduce((o, [key, effect])=>{
@@ -41,14 +52,15 @@ function createModel(models, options = {}){
       }, {})
     }
 
-    const localSelectors = Object.entries(selectors).reduce((o, [key, selector])=>{
-      o[key] = function(){
-        return function(rootState, props){
-          selector(rootState[key], props)
-        }
+    let localSelectors
+    if(typeof selectors === 'function'){
+      localSelectors = (slice, createSelector, hasProps)=>{
+        return getLocalSelectors(selectors(slice, createSelector, hasProps))
       }
-      return o
-    }, {})
+    }
+    else{
+      localSelectors = getLocalSelectors(selectors)
+    }
 
     models = {
       [key]: {

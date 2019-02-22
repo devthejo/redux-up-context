@@ -49,21 +49,34 @@ function createContextModel(model, options = {}){
     contextConnect,
     contextStore,
     contextConnectSelectors,
-    contextUseSelectors
+    contextUseSelectors,
+    contextSelect
 
   let useStore,
       useAction,
-      select
+      createSelect
 
   if(multi){
     useStore = mapState => useContextStore(context, mapState)
     useAction = mapActions => useContextAction(context, mapActions)
-    select = () => contextStore.select
+    createSelect = () => contextStore.select
   }
   else{
     useStore = mapState => useContextStore(context, state => mapState(state[key]))
     useAction = mapActions => useContextAction(context, dispatch => mapActions(dispatch[key]))
-    select = () => contextStore.select[key]
+    createSelect = () => {
+      function subSelect(selector){
+        return contextStore.select(models=>{
+          return selector(models[key])
+        })
+      }
+      const proxy = new Proxy(subSelect, {
+        get(o, prop){
+          return contextStore.select[key][prop]
+        }
+      })
+      return subSelect
+    }
   }
 
   const contextApi = {
@@ -102,7 +115,9 @@ function createContextModel(model, options = {}){
       return contextConnect
     },
     get select(){
-      return select()
+      if(!contextSelect)
+        contextSelect = createSelect()
+      return contextSelect
     },
 
     get connectSelectors(){
