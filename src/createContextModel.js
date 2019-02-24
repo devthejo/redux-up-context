@@ -1,4 +1,4 @@
-import React, {createContext} from 'react'
+import React, {createContext, forwardRef} from 'react'
 import deepmerge from 'deepmerge'
 
 import { Provider, connect } from 'react-redux'
@@ -100,6 +100,15 @@ function createContextModel(model, options = {}){
       contextStore = store
       return <Provider context={context} store={store} children={children} />
     },
+    StoreProviderRenderer: forwardRef(({props, component: Component}, ref) => {
+      const [store] = contextApi.useModel(mergeModel=>mergeModel(props))
+      contextStore = store
+      return (
+        <Provider context={context} store={store}>
+          <Component {...props} ref={ref} />
+        </Provider>
+      )
+    }),
     useStore,
     useAction,
     get connect(){
