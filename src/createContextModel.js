@@ -95,6 +95,11 @@ function createContextModel(model, options = {}){
       contextStore = store
       return <Provider context={context} store={store} children={children} />
     },
+    StoreProvider: ({props, children}) => {
+      const [store] = contextApi.useModel(mergeModel=>mergeModel(props))
+      contextStore = store
+      return <Provider context={context} store={store} children={children} />
+    },
     useStore,
     useAction,
     get connect(){
