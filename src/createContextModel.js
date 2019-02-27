@@ -58,12 +58,12 @@ function createContextModel(model, options = {}){
 
   if(multi){
     useStore = mapState => useContextStore(context, mapState)
-    useAction = mapActions => useContextAction(context, mapActions)
+    useAction = (mapActions, inputs) => useContextAction(context, mapActions, inputs)
     createSelect = () => contextStore.select
   }
   else{
     useStore = mapState => useContextStore(context, state => mapState(state[key]))
-    useAction = mapActions => useContextAction(context, dispatch => mapActions(dispatch[key]))
+    useAction = (mapActions, inputs) => useContextAction(context, dispatch => mapActions(dispatch[key]), inputs)
     createSelect = () => {
       function subSelect(selector){
         return contextStore.select(models=>{
