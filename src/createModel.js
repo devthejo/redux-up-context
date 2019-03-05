@@ -27,11 +27,11 @@ function createModel(models, options = {}){
     const {
       state,
       reducers,
-      effects,
-      selectors,
+      effects = ()=>({}),
+      selectors = {},
     } = models
 
-    function getLocalSelectors(selectors={}){
+    function getLocalSelectors(selectors){
       return Object.entries(selectors).reduce((o, [selectorKey, selector])=>{
         o[selectorKey] = function(){
           return function(rootState, props){
